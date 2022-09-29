@@ -1,5 +1,4 @@
-use crate::errors;
-use errors::Errcode;
+use crate::errors::Errcode;
 use std::path::PathBuf;
 use structopt::StructOpt;
 
