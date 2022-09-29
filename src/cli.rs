@@ -1,3 +1,5 @@
+use crate::errors;
+use errors::Errcode;
 use std::path::PathBuf;
 use structopt::StructOpt;
 
@@ -20,7 +22,7 @@ pub struct Args {
     pub mount_dir: PathBuf,
 }
 
-pub fn parse_args() -> Args {
+pub fn parse_args() -> Result<Args, Errcode> {
     let args = Args::from_args();
 
     match args.debug {
@@ -28,7 +30,7 @@ pub fn parse_args() -> Args {
         false => setup_log(log::LevelFilter::Info),
     }
 
-    args
+    Ok(args)
 }
 
 pub fn setup_log(level: log::LevelFilter) {
