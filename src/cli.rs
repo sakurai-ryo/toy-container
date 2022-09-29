@@ -24,10 +24,12 @@ pub struct Args {
 pub fn parse_args() -> Result<Args, Errcode> {
     let args = Args::from_args();
 
-    match args.debug {
-        true => setup_log(log::LevelFilter::Debug),
-        false => setup_log(log::LevelFilter::Info),
-    }
+    let log_level = if args.debug {
+        log::LevelFilter::Debug
+    } else {
+        log::LevelFilter::Info
+    };
+    setup_log(log_level);
 
     validate_args(&args)?;
 
