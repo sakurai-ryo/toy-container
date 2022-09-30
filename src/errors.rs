@@ -7,6 +7,7 @@ pub enum Errcode {
     ArgumentInvalid(&'static str),
     ContainerError(u8),
     NotSupported(u8),
+    SocketError(u8),
 }
 
 impl Errcode {
