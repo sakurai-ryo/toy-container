@@ -2,6 +2,7 @@ mod cli;
 mod config;
 mod container;
 mod errors;
+mod ipc;
 mod kernel;
 
 #[macro_use]
