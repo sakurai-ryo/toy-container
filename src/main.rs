@@ -1,4 +1,6 @@
 mod cli;
+mod config;
+mod container;
 mod errors;
 
 use errors::exit_with_retcode;
@@ -9,7 +11,7 @@ fn main() {
     match args {
         Ok(args) => {
             debug!("Args: {:?}", args);
-            exit_with_retcode(Ok(()));
+            exit_with_retcode(container::start(args));
         }
         Err(e) => {
             exit_with_retcode(Err(e));
