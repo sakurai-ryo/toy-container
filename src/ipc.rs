@@ -8,7 +8,7 @@ pub fn generate_socket_pair() -> Result<(RawFd, RawFd), Errcode> {
         AddressFamily::Unix, // unix domain socket
         SockType::SeqPacket,
         None,
-        SockFlag::SOCK_NOSIGPIPE,
+        SockFlag::SOCK_CLOEXEC,
     ) {
         Ok(res) => Ok(res),
         Err(_) => Err(Errcode::SocketError(0)),
