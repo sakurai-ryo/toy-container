@@ -3,17 +3,20 @@ use crate::config::ContainerOpts;
 use crate::errors::Errcode;
 use crate::kernel::check_linux_version;
 
+use std::os::unix::io::RawFd;
+
 use log::{debug, error};
 
 pub struct Container {
+    sockets: (RawFd, RawFd),
     config: ContainerOpts,
 }
 
 impl Container {
     pub fn new(args: Args) -> Result<Container, Errcode> {
-        let config = ContainerOpts::new(args.command, args.uid, args.mount_dir)?;
+        let (config, sockets) = ContainerOpts::new(args.command, args.uid, args.mount_dir)?;
 
-        Ok(Container { config })
+        Ok(Container { sockets,config })
     }
 
     pub fn create(&mut self) -> Result<(), Errcode> {
