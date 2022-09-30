@@ -15,7 +15,15 @@
     // connected. This is typically a file mount in .devcontainer/docker-compose.yml
     "workspaceFolder": "/workspace",
     // Set *default* container specific settings.json values on container create.
-    "settings": {},
+    "settings": {
+        "terminal.integrated.profiles.linux": {
+            "bash": {
+              "path": "/bin/bash"
+            }
+        },
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "rust-analyzer.checkOnSave.command": "clippy"
+    },
     // Add the IDs of extensions you want installed when the container is created.
     "extensions": [
         "editorconfig.editorconfig",
@@ -23,7 +31,7 @@
         "vadimcn.vscode-lldb",
         "bungcip.better-toml",
         "serayuzgur.crates"
-    ]
+    ],
     // Use 'forwardPorts' to make a list of ports inside the container available locally.
     // "forwardPorts": [],
     // Uncomment the next line if you want start specific services in your Docker Compose config.
@@ -34,4 +42,7 @@
     // "postCreateCommand": "apt-get update && apt-get install -y curl",
     // Uncomment to connect as a non-root user if you've added one. See https://aka.ms/vscode-remote/containers/non-root.
     // "remoteUser": "vscode"
+    "runArgs": [
+        "--platform linux/amd64"
+	]
 }

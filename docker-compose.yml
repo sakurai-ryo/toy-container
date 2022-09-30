@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: docker/rust/Dockerfile
+    platform: linux/amd64
     tty: true
     working_dir: /workspace
     volumes:
