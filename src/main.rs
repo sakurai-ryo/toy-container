@@ -2,6 +2,9 @@ mod cli;
 mod config;
 mod container;
 mod errors;
+mod kernel;
+
+#[macro_use] extern crate scan_fmt;
 
 use errors::exit_with_retcode;
 use log::debug;

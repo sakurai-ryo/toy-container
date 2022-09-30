@@ -1,6 +1,7 @@
 use crate::cli::Args;
 use crate::config::ContainerOpts;
 use crate::errors::Errcode;
+use crate::kernel::check_linux_version;
 
 use log::{debug, error};
 
@@ -27,6 +28,8 @@ impl Container {
 }
 
 pub fn start(args: Args) -> Result<(), Errcode> {
+    check_linux_version()?;
+
     let mut container = Container::new(args)?;
     if let Err(e) = container.create() {
         container.clean_exit()?;
