@@ -3,6 +3,7 @@ use crate::cli::Args;
 use crate::config::ContainerOpts;
 use crate::errors::Errcode;
 use crate::kernel::check_linux_version;
+use crate::mounts::clean_mounts;
 
 use log::{debug, error};
 use nix::sys::wait::waitpid;
@@ -44,6 +45,8 @@ impl Container {
                 return Err(Errcode::SocketError(3));
             }
         }
+
+        clean_mounts(&self.config.mount_dir)?;
 
         Ok(())
     }

@@ -6,6 +6,8 @@ mod errors;
 mod hostname;
 mod ipc;
 mod kernel;
+mod mounts;
+mod utils;
 
 #[macro_use]
 extern crate scan_fmt;

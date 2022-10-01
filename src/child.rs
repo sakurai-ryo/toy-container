@@ -1,6 +1,7 @@
 use crate::config::ContainerOpts;
 use crate::errors::Errcode;
 use crate::hostname::set_container_hostname;
+use crate::mounts::setmountpoint;
 
 use log::{debug, error, info};
 use nix::libc::tm;
@@ -59,5 +60,6 @@ fn child(config: ContainerOpts) -> isize {
 
 fn setup_container_configurations(config: &ContainerOpts) -> Result<(), Errcode> {
     set_container_hostname(&config.hostname)?;
+    setmountpoint(&config.mount_dir)?;
     Ok(())
 }
