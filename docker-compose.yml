@@ -11,6 +11,11 @@ services:
     volumes:
       - .:/workspace
       - rust-target:/workspace/target
+    security_opt:
+      - seccomp:unconfined
+    cap_add:
+      - ALL
+    init: true
 
 volumes:
   rust-target:
