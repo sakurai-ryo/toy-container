@@ -48,6 +48,7 @@
     // Uncomment to connect as a non-root user if you've added one. See https://aka.ms/vscode-remote/containers/non-root.
     // "remoteUser": "vscode"
     "runArgs": [
-        "--platform linux/amd64"
+        "--platform linux/amd64",
+        "--privileged"
 	]
 }
