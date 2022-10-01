@@ -3,6 +3,7 @@ mod cli;
 mod config;
 mod container;
 mod errors;
+mod hostname;
 mod ipc;
 mod kernel;
 
