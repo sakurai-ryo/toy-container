@@ -22,7 +22,12 @@
             }
         },
         "terminal.integrated.defaultProfile.linux": "bash",
-        "rust-analyzer.checkOnSave.command": "clippy"
+        "rust-analyzer.checkOnSave.command": "clippy",
+        "editor.formatOnSave": true,
+        "rust-analyzer.cargo.allFeatures": true,
+        "[rust]": {
+            "editor.defaultFormatter": "rust-lang.rust-analyzer"
+        }
     },
     // Add the IDs of extensions you want installed when the container is created.
     "extensions": [
