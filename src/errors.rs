@@ -8,6 +8,7 @@ pub enum Errcode {
     ContainerError(u8),
     NotSupported(u8),
     SocketError(u8),
+    ChildProcessError(u8),
 }
 
 impl Errcode {

@@ -1,3 +1,4 @@
+mod child;
 mod cli;
 mod config;
 mod container;
