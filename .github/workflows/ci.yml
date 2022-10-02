@@ -13,6 +13,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: initialize
+        run: |
+        sudo apt-get update
+        sudo apt-get install zlib1g-dev librust-syscallz-dev
+
       - name: Cache Cargo
         uses: actions/cache@v2
         with:
