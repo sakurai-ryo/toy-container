@@ -5,6 +5,8 @@ use crate::errors::Errcode;
 use crate::kernel::check_linux_version;
 use crate::mounts::clean_mounts;
 use crate::namespaces::handle_child_uid_map;
+use crate::resources::clean_cgroups;
+use crate::resources::restict_resources;
 
 use log::{debug, error};
 use nix::sys::wait::waitpid;
@@ -31,6 +33,7 @@ impl Container {
 
     pub fn create(&mut self) -> Result<(), Errcode> {
         let pid = generate_child_process(self.config.clone())?;
+        restict_resources(&self.config.hostname, pid)?;
         handle_child_uid_map(pid, self.sockets.0)?;
         self.child_pid = Some(pid);
 
@@ -43,9 +46,14 @@ impl Container {
 
         for socket in [self.sockets.0, self.sockets.1].iter() {
             if let Err(e) = close(*socket) {
-                log::error!("Unable to close write socket: {:?}", e);
+                error!("Unable to close write socket: {:?}", e);
                 return Err(Errcode::SocketError(3));
             }
+        }
+
+        if let Err(e) = clean_cgroups(&self.config.hostname) {
+            error!("Cgroups cleaning failed: {}", e);
+            return Err(e);
         }
 
         clean_mounts(&self.config.mount_dir)?;
@@ -59,8 +67,8 @@ pub fn start(args: Args) -> Result<(), Errcode> {
 
     let mut container = Container::new(args)?;
     if let Err(e) = container.create() {
-        container.clean_exit()?;
         error!("Error while creating container: {:?}", e);
+        container.clean_exit()?;
         return Err(e);
     }
 

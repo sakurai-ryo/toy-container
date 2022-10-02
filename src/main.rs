@@ -1,3 +1,4 @@
+mod capabilities;
 mod child;
 mod cli;
 mod config;
@@ -8,6 +9,7 @@ mod ipc;
 mod kernel;
 mod mounts;
 mod namespaces;
+mod resources;
 mod syscalls;
 mod utils;
 

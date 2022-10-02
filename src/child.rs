@@ -1,3 +1,4 @@
+use crate::capabilities::setcapabilities;
 use crate::config::ContainerOpts;
 use crate::errors::Errcode;
 use crate::hostname::set_container_hostname;
@@ -6,7 +7,6 @@ use crate::namespaces::userns;
 use crate::syscalls::setsyscalls;
 
 use log::{debug, error, info};
-use nix::libc::tm;
 use nix::sched::clone;
 use nix::sched::CloneFlags;
 use nix::sys::signal::Signal;
@@ -52,7 +52,7 @@ fn child(config: ContainerOpts) -> isize {
         }
     }
 
-    if let Err(_) = close(config.fd) {
+    if close(config.fd).is_err() {
         error!("Error while closing socket ...");
         return -1;
     }
@@ -70,6 +70,7 @@ fn setup_container_configurations(config: &ContainerOpts) -> Result<(), Errcode>
     set_container_hostname(&config.hostname)?;
     setmountpoint(&config.mount_dir)?;
     userns(config.fd, config.uid)?;
+    setcapabilities()?;
     setsyscalls()?;
 
     Ok(())

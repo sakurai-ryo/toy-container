@@ -14,6 +14,8 @@ pub enum Errcode {
     MountsError(u8),
     NamespacesError(u8),
     SyscallsError(u8),
+    CapabilitiesError(u8),
+    ResourcesError(u8),
 }
 
 impl Errcode {

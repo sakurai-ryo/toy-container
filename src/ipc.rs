@@ -3,7 +3,7 @@ use crate::errors::Errcode;
 use nix::sys::socket::{recv, send, socketpair, AddressFamily, MsgFlags, SockFlag, SockType};
 use std::os::unix::io::RawFd;
 
-use log::{debug, error};
+use log::error;
 
 pub fn generate_socket_pair() -> Result<(RawFd, RawFd), Errcode> {
     match socketpair(

@@ -16,6 +16,7 @@ services:
     cap_add:
       - ALL
     init: true
+    privileged: true
 
 volumes:
   rust-target:
