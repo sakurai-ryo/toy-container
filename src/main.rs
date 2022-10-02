@@ -8,6 +8,7 @@ mod ipc;
 mod kernel;
 mod mounts;
 mod namespaces;
+mod syscalls;
 mod utils;
 
 #[macro_use]

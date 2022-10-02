@@ -13,6 +13,7 @@ pub enum Errcode {
     RngError,
     MountsError(u8),
     NamespacesError(u8),
+    SyscallsError(u8),
 }
 
 impl Errcode {

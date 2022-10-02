@@ -3,6 +3,7 @@ use crate::errors::Errcode;
 use crate::hostname::set_container_hostname;
 use crate::mounts::setmountpoint;
 use crate::namespaces::userns;
+use crate::syscalls::setsyscalls;
 
 use log::{debug, error, info};
 use nix::libc::tm;
@@ -69,5 +70,7 @@ fn setup_container_configurations(config: &ContainerOpts) -> Result<(), Errcode>
     set_container_hostname(&config.hostname)?;
     setmountpoint(&config.mount_dir)?;
     userns(config.fd, config.uid)?;
+    setsyscalls()?;
+
     Ok(())
 }
