@@ -62,6 +62,7 @@ pub fn setmountpoint(mount_dir: &PathBuf) -> Result<(), Errcode> {
     Ok(())
 }
 
+// TODO: 実装
 pub fn clean_mounts(_rootpath: &PathBuf) -> Result<(), Errcode> {
     Ok(())
 }
