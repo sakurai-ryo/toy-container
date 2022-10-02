@@ -7,6 +7,7 @@ mod hostname;
 mod ipc;
 mod kernel;
 mod mounts;
+mod namespaces;
 mod utils;
 
 #[macro_use]

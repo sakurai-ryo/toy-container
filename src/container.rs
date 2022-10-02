@@ -4,6 +4,7 @@ use crate::config::ContainerOpts;
 use crate::errors::Errcode;
 use crate::kernel::check_linux_version;
 use crate::mounts::clean_mounts;
+use crate::namespaces::handle_child_uid_map;
 
 use log::{debug, error};
 use nix::sys::wait::waitpid;
@@ -30,6 +31,7 @@ impl Container {
 
     pub fn create(&mut self) -> Result<(), Errcode> {
         let pid = generate_child_process(self.config.clone())?;
+        handle_child_uid_map(pid, self.sockets.0)?;
         self.child_pid = Some(pid);
 
         debug!("Creation finished");

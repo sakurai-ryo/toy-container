@@ -11,18 +11,20 @@ use std::fs::remove_dir;
 use std::path::PathBuf;
 
 pub fn setmountpoint(mount_dir: &PathBuf) -> Result<(), Errcode> {
-    // $ ROOTFS=$(mktemp -d)
-    // $ cp -a /bin /lib /lib64 $ROOTFS
-    // $ NEW_ROOT=$ROOTFS
-    // $ mkdir $NEW_ROOT/{.put_old,proc}
-    // $ unshare -mpfr /bin/sh -c " \
-    //   mount --bind $NEW_ROOT $NEW_ROOT && \
-    //   mount -t proc proc $NEW_ROOT/proc && \
-    //   pivot_root $NEW_ROOT $NEW_ROOT/.put_old && \
-    //   umount -l /.put_old && \
-    //   cd / && \
-    //   exec /bin/sh
-    // "
+    /*
+        $ ROOTFS=$(mktemp -d)
+        $ cp -a /bin /lib /lib64 $ROOTFS
+        $ NEW_ROOT=$ROOTFS
+        $ mkdir $NEW_ROOT/{.put_old,proc}
+        $ unshare -mpfr /bin/sh -c " \
+        mount --bind $NEW_ROOT $NEW_ROOT && \
+        mount -t proc proc $NEW_ROOT/proc && \
+        pivot_root $NEW_ROOT $NEW_ROOT/.put_old && \
+        umount -l /.put_old && \
+        cd / && \
+        exec /bin/sh
+        "
+    */
 
     debug!("Setting mount points ...");
     mount_directory(
