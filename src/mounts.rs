@@ -31,7 +31,7 @@ pub fn setmountpoint(mount_dir: &PathBuf) -> Result<(), Errcode> {
         vec![MsFlags::MS_REC, MsFlags::MS_PRIVATE],
     )?;
 
-    let new_root = PathBuf::from(format!("/tmp/crabcan.{}", random_string(12)));
+    let new_root = PathBuf::from(format!("/tmp/container.{}", random_string(12)));
     debug!(
         "Mounting temp directory {}",
         new_root.as_path().to_str().unwrap()
