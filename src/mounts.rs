@@ -11,7 +11,20 @@ use std::fs::remove_dir;
 use std::path::PathBuf;
 
 pub fn setmountpoint(mount_dir: &PathBuf) -> Result<(), Errcode> {
-    log::debug!("Setting mount points ...");
+    // $ ROOTFS=$(mktemp -d)
+    // $ cp -a /bin /lib /lib64 $ROOTFS
+    // $ NEW_ROOT=$ROOTFS
+    // $ mkdir $NEW_ROOT/{.put_old,proc}
+    // $ unshare -mpfr /bin/sh -c " \
+    //   mount --bind $NEW_ROOT $NEW_ROOT && \
+    //   mount -t proc proc $NEW_ROOT/proc && \
+    //   pivot_root $NEW_ROOT $NEW_ROOT/.put_old && \
+    //   umount -l /.put_old && \
+    //   cd / && \
+    //   exec /bin/sh
+    // "
+
+    debug!("Setting mount points ...");
     mount_directory(
         None,
         &PathBuf::from("/"),
@@ -19,7 +32,7 @@ pub fn setmountpoint(mount_dir: &PathBuf) -> Result<(), Errcode> {
     )?;
 
     let new_root = PathBuf::from(format!("/tmp/crabcan.{}", random_string(12)));
-    log::debug!(
+    debug!(
         "Mounting temp directory {}",
         new_root.as_path().to_str().unwrap()
     );
@@ -30,7 +43,7 @@ pub fn setmountpoint(mount_dir: &PathBuf) -> Result<(), Errcode> {
         vec![MsFlags::MS_BIND, MsFlags::MS_PRIVATE],
     )?;
 
-    log::debug!("Pivoting root");
+    debug!("Pivoting root");
     let old_root_tail = format!("oldroot.{}", random_string(6));
     let put_old = new_root.join(PathBuf::from(old_root_tail.clone()));
     create_directory(&put_old)?;
@@ -38,13 +51,14 @@ pub fn setmountpoint(mount_dir: &PathBuf) -> Result<(), Errcode> {
         return Err(Errcode::MountsError(4));
     }
 
-    log::debug!("Unmounting old root");
+    debug!("Unmounting old root");
     let old_root = PathBuf::from(format!("/{}", old_root_tail));
     if let Err(_) = chdir(&PathBuf::from("/")) {
         return Err(Errcode::MountsError(5));
     }
     unmount_path(&old_root)?;
     delete_dir(&old_root)?;
+
     Ok(())
 }
 
