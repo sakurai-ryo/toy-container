@@ -15,6 +15,7 @@ pub struct ContainerOpts {
     pub mount_dir: PathBuf,
     pub fd: RawFd,
     pub hostname: String,
+    pub addpaths: Vec<(PathBuf, PathBuf)>,
 }
 
 impl ContainerOpts {
@@ -22,6 +23,7 @@ impl ContainerOpts {
         command: String,
         uid: u32,
         mount_dir: PathBuf,
+        addpaths: Vec<(PathBuf, PathBuf)>,
     ) -> Result<(ContainerOpts, (RawFd, RawFd)), Errcode> {
         let argv: Vec<CString> = command
             .split_ascii_whitespace()
@@ -36,6 +38,7 @@ impl ContainerOpts {
                 argv,
                 uid,
                 mount_dir,
+                addpaths,
                 fd: sockets.1,
                 hostname: generate_hostname()?,
             },

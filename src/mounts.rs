@@ -10,7 +10,10 @@ use std::fs::create_dir_all;
 use std::fs::remove_dir;
 use std::path::PathBuf;
 
-pub fn setmountpoint(mount_dir: &PathBuf) -> Result<(), Errcode> {
+pub fn setmountpoint(
+    mount_dir: &PathBuf,
+    addpaths: &Vec<(PathBuf, PathBuf)>,
+) -> Result<(), Errcode> {
     /*
         $ ROOTFS=$(mktemp -d)
         $ cp -a /bin /lib /lib64 $ROOTFS
@@ -44,6 +47,17 @@ pub fn setmountpoint(mount_dir: &PathBuf) -> Result<(), Errcode> {
         &new_root,
         vec![MsFlags::MS_BIND, MsFlags::MS_PRIVATE],
     )?;
+
+    debug!("Mounting additionnal paths");
+    for (inpath, mntpath) in addpaths.iter() {
+        let outpath = new_root.join(mntpath);
+        create_directory(&outpath)?;
+        mount_directory(
+            Some(inpath),
+            &outpath,
+            vec![MsFlags::MS_PRIVATE, MsFlags::MS_BIND, MsFlags::MS_RDONLY],
+        )?; // readonly for shared library
+    }
 
     debug!("Pivoting root");
     let old_root_tail = format!("oldroot.{}", random_string(6));

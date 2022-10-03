@@ -19,6 +19,10 @@ pub struct Args {
     /// Directory to mount as root of the container
     #[structopt(parse(from_os_str), short = "m", long = "mount")]
     pub mount_dir: PathBuf,
+
+    /// Mount a directory inside the container
+    #[structopt(parse(from_os_str), short = "a", long = "add")]
+    pub addpaths: Vec<PathBuf>,
 }
 
 pub fn parse_args() -> Result<Args, Errcode> {
@@ -39,6 +43,10 @@ pub fn parse_args() -> Result<Args, Errcode> {
 fn validate_args(args: &Args) -> Result<(), Errcode> {
     if !args.mount_dir.exists() || !args.mount_dir.is_dir() {
         return Err(Errcode::ArgumentInvalid("mount"));
+    }
+
+    if args.command.is_empty() {
+        return Err(Errcode::ArgumentInvalid("command"));
     }
 
     Ok(())

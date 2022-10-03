@@ -11,7 +11,9 @@ use nix::sched::clone;
 use nix::sched::CloneFlags;
 use nix::sys::signal::Signal;
 use nix::unistd::close;
+use nix::unistd::execve;
 use nix::unistd::Pid;
+use std::ffi::CString;
 
 // 1KiB
 const STACK_SIZE: usize = 1024 * 1024;
@@ -63,12 +65,18 @@ fn child(config: ContainerOpts) -> isize {
         config.argv
     );
 
-    0
+    match execve::<CString, CString>(&config.path, &config.argv, &[]) {
+        Ok(_) => 0,
+        Err(e) => {
+            error!("Error while trying to perform execve: {:?}", e);
+            -1
+        }
+    }
 }
 
 fn setup_container_configurations(config: &ContainerOpts) -> Result<(), Errcode> {
     set_container_hostname(&config.hostname)?;
-    setmountpoint(&config.mount_dir)?;
+    setmountpoint(&config.mount_dir, &config.addpaths)?;
     userns(config.fd, config.uid)?;
     setcapabilities()?;
     setsyscalls()?;
