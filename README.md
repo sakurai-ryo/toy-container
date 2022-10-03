@@ -1,11 +1,11 @@
 参孝: https://litchipi.github.io/series/container_in_rust
 
-### Docker
+### Docker on VM
 ```bash
 $ limactl start devcontainer.yml
 ```
 
-### VM
+### Rust on VM
 ```bash
 $ limactl start x86_vm.yml
 $ limactl shell x86_vm
