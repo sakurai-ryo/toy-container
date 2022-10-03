@@ -4,5 +4,12 @@
     "rust-analyzer.cargo.allFeatures": true,
     "[rust]": {
         "editor.defaultFormatter": "rust-lang.rust-analyzer"
-    }
+    },
+    "remote.SSH.defaultExtensions": [
+        "editorconfig.editorconfig",
+        "rust-lang.rust-analyzer",
+        "vadimcn.vscode-lldb",
+        "bungcip.better-toml",
+        "serayuzgur.crates"
+    ]
 }
