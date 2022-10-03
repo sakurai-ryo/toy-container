@@ -96,7 +96,7 @@ ssh:
   # 🟢 Builtin default: 0 (automatically assigned to a free port)
   # NOTE: when the instance name is "default", the builtin default value is set to
   # 60022 for backward compatibility.
-  localPort: 0
+  localPort: 60022
   # Load ~/.ssh/*.pub in addition to $LIMA_HOME/_config/user.pub .
   # This option is useful when you want to use other SSH-based
   # applications such as rsync with the Lima instance.
@@ -220,7 +220,6 @@ provision:
         librust-syscallz-dev
     rm -rf /var/lib/apt/lists/*
 
-# `user` is executed without the root privilege
 - mode: system
   script: |
     #!/bin/bash
@@ -240,19 +239,28 @@ provision:
         i386) rustArch='i686-unknown-linux-gnu'; rustupSha256='0e0be29c560ad958ba52fcf06b3ea04435cb3cd674fbe11ce7d954093b9504fd' ;;
         *) echo >&2 "unsupported architecture: ${dpkgArch}"; exit 1 ;; \
     esac;
-    url="https://static.rust-lang.org/rustup/archive/1.25.1/${rustArch}/rustup-init";
-    wget "$url";
-    echo "${rustupSha256} *rustup-init" | sha256sum -c -;
-    chmod +x rustup-init;
-    ./rustup-init -y --no-modify-path --profile minimal --default-toolchain $RUST_VERSION --default-host ${rustArch};
-    rm rustup-init;
+    # url="https://static.rust-lang.org/rustup/archive/1.25.1/${rustArch}/rustup-init";
+    # wget "$url";
+    # echo "${rustupSha256} *rustup-init" | sha256sum -c -;
+    # chmod +x rustup-init;
+    # ./rustup-init -y --no-modify-path --profile minimal --default-toolchain $RUST_VERSION --default-host ${rustArch};
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > rustup-init.sh
+    bash rustup-init.sh -y --no-modify-path --profile minimal --default-toolchain $RUST_VERSION --default-host ${rustArch}
+    rm rustup-init.sh;
     chmod -R a+w $RUSTUP_HOME $CARGO_HOME;
     rustup --version;
     cargo --version;
     rustc --version;
     rustup component add rls rust-analysis rust-src rustfmt clippy
+
+- mode: user
+  script: |
+    #!/bin/bash
+    set -eux -o pipefail
+
     source "/usr/local/cargo/env"
     rustup default stable
+    echo 'source "/usr/local/cargo/env"' >> ~/.profile
 
 # Probe scripts to check readiness.
 # 🟢 Builtin default: null
