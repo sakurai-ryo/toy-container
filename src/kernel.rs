@@ -16,7 +16,7 @@ pub fn check_linux_version() -> Result<(), Errcode> {
             if version < MINIMAL_KERNEL_VERSION {
                 return Err(Errcode::NotSupported(0));
             }
-        },
+        }
         Err(_) => return Err(Errcode::ContainerError(0)),
     }
 
