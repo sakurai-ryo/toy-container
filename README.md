@@ -14,3 +14,8 @@ $ limactl shell x86_vm
 $ ssh ${USER}@localhost -p 60022 -i /Users/${USER}/.lima/_config/user
 $ ssh-keygen -R "[localhost]:60022"
 ```
+
+### 実行
+```
+$ sudo ./target/debug/crabcan --debug -u 0 -m ./mountdir/ -c "/bash" -a /lib64:/lib64 -a /lib:/lib
+```
