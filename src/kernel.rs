@@ -11,12 +11,13 @@ pub fn check_linux_version() -> Result<(), Errcode> {
     debug!("Linux release: {}", release);
     debug!("Machine hardware platform: {}", machine);
 
-    if let Ok(version) = scan_fmt!(release, "{f}.{}", f32) {
-        if version < MINIMAL_KERNEL_VERSION {
-            return Err(Errcode::NotSupported(0));
-        }
-    } else {
-        return Err(Errcode::ContainerError(0));
+    match scan_fmt!(release, "{f}.{}", f32) {
+        Ok(version) => {
+            if version < MINIMAL_KERNEL_VERSION {
+                return Err(Errcode::NotSupported(0));
+            }
+        },
+        Err(_) => return Err(Errcode::ContainerError(0)),
     }
 
     if host.machine() != "x86_64" {
