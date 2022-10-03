@@ -15,3 +15,5 @@ Cargo.lock
 
 .dccache
 mountdir/
+busybox/
+ubuntu/

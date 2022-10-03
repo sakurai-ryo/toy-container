@@ -17,5 +17,13 @@ $ ssh-keygen -R "[localhost]:60022"
 
 ### 実行
 ```
+# 共有ライブラリを指定する
 $ sudo ./target/debug/crabcan --debug -u 0 -m ./mountdir/ -c "/bash" -a /lib64:/lib64 -a /lib:/lib
+```
+
+```
+# Dockerイメージをダンプして、ルートディレクトリとして利用する
+$ mkdir -p busybox
+$ docker export $(docker create busybox --platform linux/amd64) | tar -C busybox -xvf -
+$ sudo ./target/debug/crabcan --debug -u 0 -m ./busybox -c "/bin/sh"
 ```
