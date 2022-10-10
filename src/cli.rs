@@ -3,7 +3,7 @@ use crate::cmd_start;
 use crate::errors::Errcode;
 
 use log::LevelFilter;
-use structopt::StructOpt;
+use structopt::{clap, StructOpt};
 
 pub trait CommandDef {
     fn run(&self) -> Result<(), Errcode>;
@@ -23,6 +23,7 @@ pub trait CommandDef {
 }
 
 #[derive(Debug, StructOpt)]
+#[structopt(setting(clap::AppSettings::ColoredHelp))]
 pub struct CommandOpt {
     #[structopt(subcommand)]
     sub: SubCommands,
@@ -32,9 +33,11 @@ pub struct CommandOpt {
 #[structopt(about = "toycon COMMAND [OPTIONS, ...]")]
 pub enum SubCommands {
     #[structopt(about = "Create container")]
+    #[structopt(setting(clap::AppSettings::ColoredHelp))]
     Create(cmd_create::CreateCmdInput),
 
     #[structopt(about = "Run container")]
+    #[structopt(setting(clap::AppSettings::ColoredHelp))]
     Run(cmd_start::RunCmdInput),
 }
 
