@@ -1,60 +1,46 @@
+use crate::cmd_create;
+use crate::cmd_run;
 use crate::errors::Errcode;
-use std::path::PathBuf;
+
+use log::LevelFilter;
 use structopt::StructOpt;
 
+pub trait CommandDef {
+    fn run(&self) -> Result<(), Errcode>;
+    fn validate(&self) -> Result<(), Errcode>;
+    fn setup_logger(&self, debug: bool) -> Result<(), Errcode> {
+        let log_level = if debug {
+            LevelFilter::Debug
+        } else {
+            LevelFilter::Info
+        };
+        env_logger::Builder::from_default_env()
+            .format_timestamp_secs()
+            .filter(None, log_level)
+            .init();
+        Ok(())
+    }
+}
+
 #[derive(Debug, StructOpt)]
-pub struct Args {
-    /// Activate debug mode
-    #[structopt(short, long)]
-    debug: bool,
-
-    /// Command to execute inside the container
-    #[structopt(short, long)]
-    pub command: String,
-
-    /// User ID to create inside the container
-    #[structopt(short, long)]
-    pub uid: u32,
-
-    /// Directory to mount as root of the container
-    #[structopt(parse(from_os_str), short = "m", long = "mount")]
-    pub mount_dir: PathBuf,
-
-    /// Mount a directory inside the container
-    #[structopt(parse(from_os_str), short = "a", long = "add")]
-    pub addpaths: Vec<PathBuf>,
+pub struct CommandOpt {
+    #[structopt(subcommand)]
+    sub: SubCommands,
 }
 
-pub fn parse_args() -> Result<Args, Errcode> {
-    let args = Args::from_args();
+#[derive(Debug, StructOpt)]
+#[structopt(about = "containerd COMMAND [OPTIONS, ...]")]
+pub enum SubCommands {
+    #[structopt(about = "Create container")]
+    Create(cmd_create::CreateCmdInput),
 
-    let log_level = if args.debug {
-        log::LevelFilter::Debug
-    } else {
-        log::LevelFilter::Info
-    };
-    setup_log(log_level);
-
-    validate_args(&args)?;
-
-    Ok(args)
+    #[structopt(about = "Run container")]
+    Run(cmd_run::RunCmdInput),
 }
 
-fn validate_args(args: &Args) -> Result<(), Errcode> {
-    if !args.mount_dir.exists() || !args.mount_dir.is_dir() {
-        return Err(Errcode::ArgumentInvalid("mount"));
+pub fn run_subcommand() -> Result<(), Errcode> {
+    match CommandOpt::from_args().sub {
+        SubCommands::Create(cmd) => cmd.run(),
+        SubCommands::Run(cmd) => cmd.run(),
     }
-
-    if args.command.is_empty() {
-        return Err(Errcode::ArgumentInvalid("command"));
-    }
-
-    Ok(())
-}
-
-fn setup_log(level: log::LevelFilter) {
-    env_logger::Builder::from_default_env()
-        .format_timestamp_secs()
-        .filter(None, level)
-        .init();
 }

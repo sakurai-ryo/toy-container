@@ -1,5 +1,5 @@
 use crate::child::generate_child_process;
-use crate::cli::Args;
+use crate::cmd_create::CreateCmdInput;
 use crate::config::ContainerOpts;
 use crate::errors::Errcode;
 use crate::kernel::check_linux_version;
@@ -22,7 +22,7 @@ pub struct Container {
 }
 
 impl Container {
-    pub fn new(args: Args) -> Result<Container, Errcode> {
+    pub fn new(args: &CreateCmdInput) -> Result<Container, Errcode> {
         let mut addpaths = vec![];
         for ap_pair in args.addpaths.iter() {
             let mut pair = ap_pair.to_str().unwrap().split(":");
@@ -37,8 +37,12 @@ impl Container {
             addpaths.push((frompath, mntpath));
         }
 
-        let (config, sockets) =
-            ContainerOpts::new(args.command, args.uid, args.mount_dir, addpaths)?;
+        let (config, sockets) = ContainerOpts::new(
+            args.command.clone(),
+            args.uid,
+            args.mount_dir.clone(),
+            addpaths,
+        )?;
 
         Ok(Container {
             sockets,
@@ -78,7 +82,7 @@ impl Container {
     }
 }
 
-pub fn start(args: Args) -> Result<(), Errcode> {
+pub fn start(args: &CreateCmdInput) -> Result<(), Errcode> {
     check_linux_version()?;
 
     let mut container = Container::new(args)?;

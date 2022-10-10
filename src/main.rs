@@ -1,6 +1,8 @@
 mod capabilities;
 mod child;
 mod cli;
+mod cmd_create;
+mod cmd_run;
 mod config;
 mod container;
 mod errors;
@@ -17,17 +19,7 @@ mod utils;
 extern crate scan_fmt;
 
 use errors::exit_with_retcode;
-use log::debug;
 
 fn main() {
-    let args = cli::parse_args();
-    match args {
-        Ok(args) => {
-            debug!("Args: {:?}", args);
-            exit_with_retcode(container::start(args));
-        }
-        Err(e) => {
-            exit_with_retcode(Err(e));
-        }
-    }
+    exit_with_retcode(cli::run_subcommand());
 }
