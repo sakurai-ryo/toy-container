@@ -16,6 +16,15 @@ pub enum Errcode {
     SyscallsError(u8),
     CapabilitiesError(u8),
     ResourcesError(u8),
+
+    // https://github.com/opencontainers/runc/blob/main/libcontainer/error.go
+    ExistErrors,
+    InvalidIDError,
+    NotExistError,
+    PausedError,
+    RunningError,
+    NotRunningError,
+    NotPausedError,
 }
 
 impl Errcode {
@@ -29,6 +38,13 @@ impl fmt::Display for Errcode {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match &self {
             Errcode::ArgumentInvalid(element) => write!(f, "ArgumentInvalid: {}", element),
+            Errcode::ExistErrors => write!(f, "container with given ID already exists"),
+            Errcode::InvalidIDError => write!(f, "invalid container ID format"),
+            Errcode::NotExistError => write!(f, "container does not exist"),
+            Errcode::PausedError => write!(f, "container paused"),
+            Errcode::RunningError => write!(f, "container still running"),
+            Errcode::NotRunningError => write!(f, "container not running"),
+            Errcode::NotPausedError => write!(f, "container not paused"),
             _ => write!(f, "Unknown error"),
         }
     }
