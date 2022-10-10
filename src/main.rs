@@ -2,7 +2,7 @@ mod capabilities;
 mod child;
 mod cli;
 mod cmd_create;
-mod cmd_run;
+mod cmd_start;
 mod config;
 mod container;
 mod errors;

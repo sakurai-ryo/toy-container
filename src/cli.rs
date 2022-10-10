@@ -1,5 +1,5 @@
 use crate::cmd_create;
-use crate::cmd_run;
+use crate::cmd_start;
 use crate::errors::Errcode;
 
 use log::LevelFilter;
@@ -35,7 +35,7 @@ pub enum SubCommands {
     Create(cmd_create::CreateCmdInput),
 
     #[structopt(about = "Run container")]
-    Run(cmd_run::RunCmdInput),
+    Run(cmd_start::RunCmdInput),
 }
 
 pub fn run_subcommand() -> Result<(), Errcode> {
