@@ -1,4 +1,4 @@
-下記のチュートリアルをベースにして、OCI specのcreateとstartの実装までやる
+下記のチュートリアルをベースにして、OCI runtime specのcreateとstartの実装までやる
 https://litchipi.github.io/series/container_in_rust
 
 ### Docker on VM
