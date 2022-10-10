@@ -29,7 +29,7 @@ pub struct CommandOpt {
 }
 
 #[derive(Debug, StructOpt)]
-#[structopt(about = "containerd COMMAND [OPTIONS, ...]")]
+#[structopt(about = "toycon COMMAND [OPTIONS, ...]")]
 pub enum SubCommands {
     #[structopt(about = "Create container")]
     Create(cmd_create::CreateCmdInput),
