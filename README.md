@@ -26,5 +26,6 @@ $ sudo ./target/debug/toycon --debug -u 0 -m ./mountdir/ -c "/bash" -a /lib64:/l
 # Dockerイメージをダンプして、ルートディレクトリとして利用する
 $ mkdir -p busybox
 $ docker export $(docker create busybox --platform linux/amd64) | tar -C busybox -xvf -
+$ cd busybox && runc spec && cd ../
 $ sudo ./target/debug/toycon --debug -u 0 -m ./busybox -c "/bin/sh"
 ```

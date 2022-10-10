@@ -217,7 +217,8 @@ provision:
         unzip \
         xz-utils \
         zlib1g-dev \
-        librust-syscallz-dev
+        librust-syscallz-dev \
+        runc
     rm -rf /var/lib/apt/lists/*
 
 - mode: system
