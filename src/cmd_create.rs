@@ -1,6 +1,7 @@
 use crate::cli::CommandDef;
 use crate::container;
 use crate::errors::Errcode;
+use crate::spec;
 
 use log::debug;
 use std::path::PathBuf;
@@ -27,6 +28,14 @@ pub struct CreateCmdInput {
     /// Mount a directory inside the container
     #[structopt(parse(from_os_str), short = "a", long = "add")]
     pub addpaths: Vec<PathBuf>,
+
+    // OCI spec
+    /// container_id is your name for the instance of the container that you are starting. The name you provide for the container instance must be unique on your host.
+    pub container_id: String,
+
+    /// path to the root of the bundle directory, defaults to the current directory
+    #[structopt(parse(from_os_str), short = "b", long = "bundle")]
+    pub bundle: PathBuf,
 }
 
 impl CommandDef for CreateCmdInput {
@@ -46,6 +55,9 @@ impl CommandDef for CreateCmdInput {
     fn run(&self) -> Result<(), Errcode> {
         self.validate()?;
         self.setup_logger(self.debug)?;
+
+        let spec = spec::load_spec(self.bundle.join("config.json"))?;
+        debug!("Spec file: {:?}", spec);
 
         container::start(self)?;
         Ok(())

@@ -12,6 +12,7 @@ mod kernel;
 mod mounts;
 mod namespaces;
 mod resources;
+mod spec;
 mod syscalls;
 mod utils;
 
