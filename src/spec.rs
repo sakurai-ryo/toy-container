@@ -103,20 +103,22 @@ pub struct Namespace {
 }
 
 pub fn load_spec(bundle_path: PathBuf) -> Result<Spec, Errcode> {
-    let content = match fs::read_to_string(bundle_path) {
-        Ok(c) => Ok(c),
-        Err(_) => Err(Errcode::ArgumentInvalid("bundle")),
-    }?;
+    // let content = match fs::read_to_string(bundle_path) {
+    //     Ok(c) => Ok(c),
+    //     Err(_) => Err(Errcode::ArgumentInvalid("bundle")),
+    // }?;
+    //
+    // match serde_json::from_str(content.as_str()) {
+    //     Ok(spec) => Ok(spec),
+    //     Err(_) => Err(Errcode::ArgumentInvalid("bundle")),
+    // }
 
-    match serde_json::from_str(content.as_str()) {
-        Ok(spec) => Ok(spec),
-        Err(_) => Err(Errcode::ArgumentInvalid("bundle")),
-    }
-
-    // fs::read_to_string(bundle_path)
-    //     .map_err(|_| Err(Errcode::ArgumentInvalid("bundle")))
-    //     .and_then(|content: String| serde_json::from_str(content.as_str()))
-    //     .unwrap_or(Err(Errcode::ArgumentInvalid("bundle")))
+    // .map_err(|_| Err(Errcode::ArgumentInvalid("bundle")))
+    fs::read_to_string(bundle_path)
+        .and_then(|content: String| {
+            serde_json::from_str(content.as_str()).map_err(Err(Errcode::ArgumentInvalid("bundle")))
+        })
+        .unwrap_or(Err(Errcode::ArgumentInvalid("bundle")))
 }
 
 // TODO: 実装(https://github.com/opencontainers/runc/blob/526d3b33742eaf502d8bf156ca794aae58ade8c7/utils_linux.go#L312)
