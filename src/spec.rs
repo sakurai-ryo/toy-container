@@ -103,17 +103,6 @@ pub struct Namespace {
 }
 
 pub fn load_spec(bundle_path: PathBuf) -> Result<Spec, Errcode> {
-    // let content = match fs::read_to_string(bundle_path) {
-    //     Ok(c) => Ok(c),
-    //     Err(_) => Err(Errcode::ArgumentInvalid("bundle")),
-    // }?;
-    //
-    // match serde_json::from_str(content.as_str()) {
-    //     Ok(spec) => Ok(spec),
-    //     Err(_) => Err(Errcode::ArgumentInvalid("bundle")),
-    // }
-
-    // .map_err(|_| Err(Errcode::ArgumentInvalid("bundle")))
     fs::read_to_string(bundle_path)
         .and_then(|content: String| {
             serde_json::from_str(content.as_str()).map_err(Err(Errcode::ArgumentInvalid("bundle")))
