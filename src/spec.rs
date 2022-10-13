@@ -103,15 +103,14 @@ pub struct Namespace {
 }
 
 pub fn load_spec(bundle_path: PathBuf) -> Result<Spec, Errcode> {
-    let content = match fs::read_to_string(bundle_path) {
-        Ok(c) => Ok(c),
-        Err(_) => Err(Errcode::ArgumentInvalid("bundle")),
-    }?;
-
-    match serde_json::from_str(content.as_str()) {
-        Ok(spec) => Ok(spec),
-        Err(_) => Err(Errcode::ArgumentInvalid("bundle")),
-    }
+    fs::read_to_string(bundle_path)
+        .map(|content| Ok(content))
+        .unwrap_or(Err(Errcode::ArgumentInvalid("bundle")))
+        .and_then(|content| {
+            serde_json::from_str(content.as_str())
+                .map(|spec| Ok(spec))
+                .unwrap_or(Err(Errcode::ArgumentInvalid("bundle")))
+        })
 }
 
 // TODO: 実装(https://github.com/opencontainers/runc/blob/526d3b33742eaf502d8bf156ca794aae58ade8c7/utils_linux.go#L312)
