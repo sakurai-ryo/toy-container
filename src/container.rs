@@ -84,7 +84,7 @@ impl Container {
 
 // 参孝実装
 // https://github.com/opencontainers/runc/blob/526d3b33742eaf502d8bf156ca794aae58ade8c7/utils_linux.go#L312
-pub fn start(args: &CreateCmdInput) -> Result<(), Errcode> {
+pub fn create(args: &CreateCmdInput) -> Result<(), Errcode> {
     check_linux_version()?;
 
     let mut container = Container::new(args)?;
