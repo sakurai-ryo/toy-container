@@ -15,6 +15,7 @@ mod resources;
 mod spec;
 mod syscalls;
 mod utils;
+mod process;
 
 #[macro_use]
 extern crate scan_fmt;
