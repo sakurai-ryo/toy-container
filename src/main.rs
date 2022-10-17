@@ -10,12 +10,13 @@ mod hostname;
 mod ipc;
 mod kernel;
 mod mounts;
+mod named_pipe;
 mod namespaces;
+mod process;
 mod resources;
 mod spec;
 mod syscalls;
 mod utils;
-mod process;
 
 #[macro_use]
 extern crate scan_fmt;

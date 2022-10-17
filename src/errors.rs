@@ -16,6 +16,7 @@ pub enum Errcode {
     SyscallsError(u8),
     CapabilitiesError(u8),
     ResourcesError(u8),
+    TempDirCreateError(u8),
 
     // https://github.com/opencontainers/runc/blob/main/libcontainer/error.go
     ExistErrors,
