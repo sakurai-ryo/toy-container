@@ -56,8 +56,6 @@ impl CommandDef for CreateCmdInput {
         self.validate()?;
         self.setup_logger(self.debug)?;
 
-        let spec = spec::load_spec(self.bundle.join("config.json"))?;
-
         container::create(self)?;
         Ok(())
     }

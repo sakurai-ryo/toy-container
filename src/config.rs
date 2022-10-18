@@ -1,6 +1,7 @@
 use crate::errors::Errcode;
 use crate::hostname::generate_hostname;
 use crate::ipc::generate_socket_pair;
+use crate::spec;
 
 use std::ffi::CString;
 use std::os::unix::io::RawFd;
@@ -16,6 +17,7 @@ pub struct ContainerOpts {
     pub fd: RawFd,
     pub hostname: String,
     pub addpaths: Vec<(PathBuf, PathBuf)>,
+    pub spec: spec::Spec,
 }
 
 impl ContainerOpts {
@@ -24,6 +26,7 @@ impl ContainerOpts {
         uid: u32,
         mount_dir: PathBuf,
         addpaths: Vec<(PathBuf, PathBuf)>,
+        spec: spec::Spec
     ) -> Result<(ContainerOpts, (RawFd, RawFd)), Errcode> {
         let argv: Vec<CString> = command
             .split_ascii_whitespace()
@@ -41,6 +44,7 @@ impl ContainerOpts {
                 addpaths,
                 fd: sockets.1,
                 hostname: generate_hostname()?,
+                spec,
             },
             sockets,
         ))

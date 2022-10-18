@@ -7,6 +7,7 @@ use crate::mounts::clean_mounts;
 use crate::namespaces::handle_child_uid_map;
 use crate::resources::clean_cgroups;
 use crate::resources::restict_resources;
+use crate::spec;
 
 use log::{debug, error};
 use nix::sys::wait::waitpid;
@@ -36,12 +37,14 @@ impl Container {
                 .to_path_buf();
             addpaths.push((frompath, mntpath));
         }
+        let spec = spec::load_spec(args.bundle.join("config.json"))?;
 
         let (config, sockets) = ContainerOpts::new(
             args.command.clone(),
             args.uid,
             args.mount_dir.clone(),
             addpaths,
+            spec,
         )?;
 
         Ok(Container {
