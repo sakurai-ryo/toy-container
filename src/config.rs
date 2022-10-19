@@ -7,7 +7,7 @@ use std::ffi::CString;
 use std::os::unix::io::RawFd;
 use std::path::PathBuf;
 
-#[derive(Clone)]
+#[derive(Debug,Clone)]
 pub struct ContainerOpts {
     pub path: CString,
     pub argv: Vec<CString>,
