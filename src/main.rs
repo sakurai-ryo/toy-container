@@ -227,5 +227,14 @@ fn mount_special_filesystem() -> Result<(), nix::Error> {
         None::<&str>,
     )?;
 
+    // cgroup v2の再マウント
+    mount(
+        Some("cgroup"),
+        "/sys/fs/cgroup",
+        Some("cgroup2"),
+        MsFlags::MS_NOSUID | MsFlags::MS_NOEXEC | MsFlags::MS_NODEV,
+        None::<&str>,
+    )?;
+
     Ok(())
 }
